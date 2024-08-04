@@ -113,6 +113,7 @@
 		zellij
 		nix-output-monitor
 		attic-client
+		attic-server
 		btop
 		fastfetch
 		wpa_supplicant

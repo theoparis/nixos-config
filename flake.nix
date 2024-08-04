@@ -25,7 +25,20 @@
 						nixpkgs.pkgs = pkgs;
 					})
 					./configuration.nix
-					./hardware-configuration.nix
+					./systems/t420.nix
+					attic.nixosModules.atticd
+				];
+			};
+				
+			gigamachine = nixpkgs.lib.nixosSystem {
+				inherit system;
+				specialArgs = { inherit inputs; };
+				modules = [
+					({
+						nixpkgs.pkgs = pkgs;
+					})
+					./configuration.nix
+					./systems/gigamachine.nix
 					attic.nixosModules.atticd
 				];
 			};
