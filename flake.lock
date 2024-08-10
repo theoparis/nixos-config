@@ -24,6 +24,22 @@
         "type": "github"
       }
     },
+    "blender": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1723248941,
+        "narHash": "sha256-j2u7Hvzpnz+rIZ85GKBLncqcf01NSoN+JLPqBxrfB5o=",
+        "owner": "blender",
+        "repo": "blender",
+        "rev": "52a0d4252ed5365903d7b612de9d81485bd13ba0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "blender",
+        "repo": "blender",
+        "type": "github"
+      }
+    },
     "crane": {
       "inputs": {
         "nixpkgs": [
@@ -78,16 +94,16 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1722421184,
-        "narHash": "sha256-/DJBI6trCeVnasdjUo9pbnodCLZcFqnVZiLUfqLH4jA=",
+        "lastModified": 1723251176,
+        "narHash": "sha256-/8vLDWZHnIxO/Odam+90SYt+EV24YBtkIFJmTfOFMns=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "9f918d616c5321ad374ae6cb5ea89c9e04bf3e58",
+        "rev": "6c7d7e4be4c8aefb3b4f4df2d083edeade740c72",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
-        "ref": "nixos-unstable",
+        "ref": "master",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -111,6 +127,7 @@
     "root": {
       "inputs": {
         "attic": "attic",
+        "blender": "blender",
         "nixpkgs": "nixpkgs"
       }
     }

@@ -2,10 +2,30 @@
 	inputs,
 	config,
 	pkgs,
+	lib,
 	...
 }:
 
 {
+	nixpkgs.overlays = [
+		(self: super: {
+			blender = super.blender.overrideAttrs (old: {
+				version = "git";
+				src = inputs.blender;
+				cmakeFlags = old.cmakeFlags ++ [
+					"-DWITH_VULKAN_BACKEND=ON"
+					"-DWITH_VULKAN_MOLTENVK=ON"
+					"-DWITH_EXPERIMENTAL_FEATURES=ON"
+				];
+
+				buildInputs = old.buildInputs ++ [
+					super.vulkan-headers
+					super.vulkan-loader
+				];
+			});
+		})
+	];
+
 	nix.settings = {
 		experimental-features = [ "ca-derivations" "nix-command" "flakes" ];
 		trusted-users = [
@@ -33,12 +53,15 @@
 		pkgs.noto-fonts-color-emoji
 	];
 	
+	boot.supportedFilesystems = [ "bcachefs" "btrfs" ];
+	boot.kernelPackages = lib.mkOverride 0 pkgs.linuxPackages_latest;
 	boot.loader.systemd-boot.enable = true;
 	boot.loader.efi.canTouchEfiVariables = true;
 
 	networking.hostName = "nixos"; 
 	networking.wireless = {
 		enable = true;
+		dbusControlled = false; 
 		userControlled.enable = true;
 	};
 
@@ -162,8 +185,18 @@
 			};
 		};
 	};
+
+	boot.binfmt.emulatedSystems = [
+		"wasm32-wasi"
+		"x86_64-windows"
+		"aarch64-linux"
+		"riscv64-linux"
+		"riscv32-linux"
+	];
 	
 	networking.firewall.enable = false;
+
+	environment.noXlibs = false;
 
 	system.stateVersion = "24.05"; 
 }
