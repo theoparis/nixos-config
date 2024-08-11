@@ -143,6 +143,7 @@
   };
 
   environment.systemPackages = [
+    pkgs.bat
     pkgs.age
     pkgs.nushell
     pkgs.helix
