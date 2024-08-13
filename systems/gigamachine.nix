@@ -7,7 +7,7 @@
 }:
 
 {
-  nix.settings.max-jobs = 12;
+  nix.settings.max-jobs = 6;
 
   imports = [ "${modulesPath}/installer/scan/not-detected.nix" ];
 

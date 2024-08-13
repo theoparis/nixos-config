@@ -8,35 +8,9 @@
 
 {
   nixpkgs.overlays = [
-    (self: super: {
-      blender = super.blender.overrideAttrs (old: {
-        version = "4.3.0";
-        srcs = [
-          inputs.blender
-          (pkgs.fetchgit {
-            name = "assets";
-            url = "https://projects.blender.org/blender/blender-assets.git";
-            rev = "6864f1832e71a31e1e04f72bb7a5a1f53f0cd01c";
-            fetchLFS = true;
-            hash = "sha256-vepK0inPMuleAJBSipwoI99nMBBiFaK/eSMHDetEtjY=";
-          })
-        ];
-        cmakeFlags = old.cmakeFlags ++ [
-          "-DWITH_VULKAN_BACKEND=ON"
-          "-DWITH_VULKAN_MOLTENVK=ON"
-          "-DWITH_EXPERIMENTAL_FEATURES=ON"
-          "-DCMAKE_CXX_FLAGS='-DVK_ENABLE_BETA_EXTENSIONS=1'"
-        ];
-
-        buildInputs = old.buildInputs ++ [
-          (super.vulkan-headers.overrideAttrs (old: {
-            src = inputs.vulkan-headers;
-          }))
-          super.vulkan-loader
-          super.shaderc
-        ];
-      });
-    })
+    (import ./overlays/blender.nix { inherit inputs; })
+    (import ./overlays/servo.nix { inherit inputs; })
+    #(import ./overlays/noxlibs.nix { })
   ];
 
   nix.settings = {
@@ -120,31 +94,36 @@
     ];
     shell = pkgs.nushell;
     packages = [
-      pkgs.librewolf
+      pkgs.firefox
       pkgs.foot
-      pkgs.tofi
-      pkgs.grim
-      pkgs.slurp
       pkgs.ffmpeg_7-full
-      pkgs.jdk22
       pkgs.neovide
-      pkgs.hyprlandPlugins.hyprexpo
-      pkgs.hyprlandPlugins.hy3
-      pkgs.hyprlandPlugins.hyprtrails
-      pkgs.hyprlandPlugins.hyprwinwrap
-      pkgs.hyprlandPlugins.hyprscroller
-      pkgs.nodejs_22
       pkgs.blender
+      pkgs.xdg-desktop-portal-cosmic
+      pkgs.cosmic-bg
+      pkgs.cosmic-osd
+      pkgs.cosmic-comp
+      pkgs.cosmic-randr
+      pkgs.cosmic-panel
+      pkgs.cosmic-icons
+      pkgs.cosmic-files
+      pkgs.cosmic-session
+      pkgs.cosmic-greeter
+      pkgs.cosmic-applets
+      pkgs.cosmic-settings
+      pkgs.cosmic-launcher
+      pkgs.cosmic-protocols
+      pkgs.cosmic-screenshot
+      pkgs.cosmic-applibrary
+      pkgs.cosmic-notifications
+      pkgs.cosmic-settings-daemon
+      pkgs.cosmic-workspaces-epoch
+      pkgs.pop-launcher
     ];
-  };
-
-  programs.hyprland = {
-    enable = true;
   };
 
   environment.systemPackages = [
     pkgs.bat
-    pkgs.age
     pkgs.nushell
     pkgs.helix
     pkgs.gitoxide
@@ -157,7 +136,6 @@
     pkgs.hyperfine
     pkgs.broot
     pkgs.zellij
-    pkgs.nix-output-monitor
     pkgs.attic-client
     pkgs.attic-server
     pkgs.btop
@@ -165,15 +143,8 @@
     pkgs.wpa_supplicant
     pkgs.dhcpcd
     pkgs.iw
-    pkgs.rustup
-    pkgs.llvmPackages.libcxxClang
-    pkgs.llvmPackages.bintools
+    pkgs.nixfmt-rfc-style
   ];
-
-  programs.gnupg.agent = {
-    enable = true;
-    enableSSHSupport = true;
-  };
 
   zramSwap = {
     enable = true;
@@ -220,9 +191,7 @@
 
   networking.firewall.enable = false;
 
-  environment.noXlibs = false;
-
-  sops.defaultSopsFile = ./secrets.json;
+  #environment.noXlibs = true;
 
   system.stateVersion = "24.05";
 }

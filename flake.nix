@@ -13,16 +13,18 @@
       url = "github:khronosgroup/vulkan-headers";
       flake = false;
     };
-    sops-nix.url = "github:Mic92/sops-nix";
+    servo = {
+      url = "github:servo/servo";
+      flake = false;
+    };
+    firefox = {
+      url = "github:mozilla/gecko-dev";
+      flake = false;
+    };
   };
 
   outputs =
-    {
-      nixpkgs,
-      attic,
-      sops-nix,
-      ...
-    }@inputs:
+    { nixpkgs, attic, ... }@inputs:
     {
       nixosConfigurations = {
         t420 = nixpkgs.lib.nixosSystem {
@@ -34,7 +36,6 @@
             ./configuration.nix
             ./systems/t420.nix
             attic.nixosModules.atticd
-            sops-nix.nixosModules.sops
           ];
         };
 
@@ -47,7 +48,6 @@
             ./configuration.nix
             ./systems/gigamachine.nix
             attic.nixosModules.atticd
-            sops-nix.nixosModules.sops
           ];
         };
 
@@ -61,7 +61,6 @@
             "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-base.nix"
             "${nixpkgs}/nixos/modules/profiles/minimal.nix"
             attic.nixosModules.atticd
-            sops-nix.nixosModules.sops
             (
               { lib, ... }:
               {

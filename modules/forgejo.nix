@@ -46,7 +46,6 @@ in
         USER = "noreply@${srv.DOMAIN}";
       };
     };
-    mailerPasswordFile = config.age.secrets.forgejo-mailer-password.path;
   };
 
   services.gitea-actions-runner = {
@@ -55,14 +54,8 @@ in
       enable = true;
       name = "monolith";
       url = "https://code.tinted.dev";
-      # Obtaining the path to the runner token file may differ
-      tokenFile = config.age.secrets.forgejo-runner-token.path;
+      #tokenFile = config.age.secrets.forgejo-runner-token.path;
       labels = [ ];
     };
   };
-
-  systemd.services.forgejo.preStart = ''
-    create="${lib.getExe config.services.forgejo.package} admin user create"
-    $create --admin --email "you@example.com" --username you --password "`cat ${config.sops.secrets.forgejo.path}`" &>/dev/null || true
-  '';
 }
